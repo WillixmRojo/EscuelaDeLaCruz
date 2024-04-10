@@ -1,0 +1,70 @@
+// app global css in SCSS form
+
+@font-face {
+  font-family: CircularStd;
+  src: url("/fonts/CircularStd/CircularStd-Book.ttf"),
+    url("/fonts/CircularStd/CircularStd-Book.svg"),
+    url("/fonts/CircularStd/CircularStd-Book.woff"),
+    url("/fonts/CircularStd/CircularStd-Book.woff2");
+}
+
+@font-face {
+  font-family: CircularStd;
+  src: url("/fonts/CircularStd/CircularStd-Bold.ttf"),
+    url("/fonts/CircularStd/CircularStd-Bold.svg"),
+    url("/fonts/CircularStd/CircularStd-Bold.woff"),
+    url("/fonts/CircularStd/CircularStd-Bold.woff2");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: HelveticaNeue;
+  src: url("/fonts/HelveticaNeue/HelveticaNeue.ttf"),
+    url("/fonts/HelveticaNeue/HelveticaNeue.svg"),
+    url("/fonts/HelveticaNeue/HelveticaNeue.eot"),
+    url("/fonts/HelveticaNeue/HelveticaNeue.woff"),
+    url("/fonts/HelveticaNeue/HelveticaNeue.woff2");
+}
+
+@font-face {
+  font-family: HelveticaNeue;
+  src: url("/fonts/HelveticaNeue/HelveticaNeueBold.ttf"),
+    url("/fonts/HelveticaNeue/HelveticaNeueBold.svg"),
+    url("/fonts/HelveticaNeue/HelveticaNeueBold.eot"),
+    url("/fonts/HelveticaNeue/HelveticaNeueBold.woff"),
+    url("/fonts/HelveticaNeue/HelveticaNeueBold.woff2");
+  font-weight: bold;
+}
+
+body,
+html {
+  background-color: $cpl-gray-base;
+  font-family: HelveticaNeue;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: $cpl-gray-base;
+  background-clip: content-box;
+  border-radius: 3px;
+  border: solid 2px transparent;
+}
+::-webkit-scrollbar-track-piece:decrement {
+  background: $cpl-white-base;
+  background-clip: content-box;
+  border: solid 2px transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 5px;
+  width: 2px;
+  background-color: $cpl-blue-base;
+  border-radius: 3px;
+  box-shadow: 0 3px 6px -2px rgba(51, 0, 51, 0.5);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

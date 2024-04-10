@@ -1,0 +1,82 @@
+// Quasar SCSS (& Sass) Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass/SCSS variables found in Quasar's source Sass/SCSS files.
+
+// Check documentation for full list of Quasar variables
+
+// Your own variables (that are declared here) and Quasar's own
+// ones will be available out of the box in your .vue/.scss/.sass files
+
+// It's highly recommended to change the default colors
+// to match your app's branding.
+// Tip: Use the "Theme Builder" on Quasar's documentation website.
+
+// <== Paleta de Colores ==> //
+// Colores Primarios
+$cpl-gray-base: #e5e9f1;
+$cpl-blue-base: #3255a4;
+$cpl-white-base: #fefefe;
+$cpl-bold-gray: #414141;
+$cpl-light-blue: #01a9e0;
+
+// Neutros
+$cpl-white-1: #f5f6f7;
+$cpl-white-2: #f3f4f7;
+$cpl-white-3: #f1f3f6;
+$cpl-white-4: #edeff4;
+$cpl-white-5: #e9ecf3;
+
+$cpl-gray-1: #e7e7e7;
+$cpl-gray-2: #d4d4d4;
+$cpl-gray-3: #afafaf;
+$cpl-gray-4: #8b8b8b;
+$cpl-gray-5: #666666;
+
+$cpl-blue-1: #e5e9f1;
+$cpl-blue-2: #d1d8e8;
+$cpl-blue-3: #a9b7d7;
+$cpl-blue-4: #8297c6;
+$cpl-blue-5: #5a76b5;
+
+// Pop Color
+$cpl-cyan-1: #c7e9f4;
+$cpl-cyan-2: #95d9ef;
+$cpl-cyan-3: #64c9ea;
+$cpl-cyan-4: #32b9e5;
+$cpl-cyan-5: #00a9e0;
+
+$cpl-yellow-1: #faf3d2;
+$cpl-yellow-2: #fceb97;
+$cpl-yellow-3: #fde883;
+$cpl-yellow-4: #fee35c;
+$cpl-yellow-5: #ffdd35;
+
+// Positive
+$cpl-positive-1: #dce899;
+$cpl-positive-2: #9fd3a3;
+$cpl-positive-3: #62c2a7;
+
+// Negative
+$cpl-negative-1: #fadd8a;
+$cpl-negative-2: #faaa65;
+$cpl-negative-3: #f1625f;
+// <== Paleta de Colores ==> //
+
+$primary: #00563b;
+$secondary: $cpl-blue-5;
+$accent: $cpl-yellow-5;
+
+$dark: $cpl-bold-gray;
+$dark-page: $cpl-gray-5;
+
+$positive: $cpl-positive-3;
+$negative: $cpl-negative-3;
+$info: $cpl-cyan-3;
+$warning: $cpl-negative-1;
+
+$cpl-background: $cpl-gray-1;
+$cpl-text-note: $cpl-gray-3;
+$cpl-text-color: $cpl-white-base;
+
+$layout-shadow: "none";
