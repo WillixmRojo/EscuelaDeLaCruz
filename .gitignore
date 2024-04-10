@@ -1,0 +1,6 @@
+#Archivo de variables de entorno
+.env
+#Carpeta de dependencias de NodeJS
+node_modules
+package-lock.json
+package.json

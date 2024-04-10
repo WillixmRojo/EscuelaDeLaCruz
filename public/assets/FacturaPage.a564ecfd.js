@@ -1,0 +1,1 @@
+import{_ as e,o as t,U as a}from"./index.31883fac.js";const c={},n={style:{width:"100%",height:"100%",display:"flex","align-items":"center","justify-content":"center","font-size":"50px"}};function r(s,o){return t(),a("div",n," Pesta\xF1a de Facturaci\xF3n ")}var _=e(c,[["render",r]]);export{_ as default};

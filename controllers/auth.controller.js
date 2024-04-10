@@ -1,0 +1,106 @@
+// Importación de librerías
+import { CatUsers } from "../models/Cat_Users.js";
+import { UsersAccess } from "../models/Users_Access.js";
+import { generateRefreshToken, generateToken } from "../utils/tokenManager.js";
+
+// Función register
+export const register = async (req, res) => {
+  try {
+    const { rfc, usuario, email, password } = req.body;
+
+    const validUser = await CatUsers.findOne({ where: { rfc } });
+
+    if (!validUser)
+      return res.status(401).json({ error: "RFC no autorizado, favor de contactar al administrador." });
+
+    const user = new UsersAccess({
+      password: password,
+      uid: validUser.id,
+    });
+
+    let idrol = validUser.idrol;
+    let rol = validUser.rol;
+    let dev_access = validUser.dev_access;
+    let beta_access = validUser.beta_access;
+    let prod_access = validUser.prod_access;
+
+    validUser.update({
+      usuario,
+      rfc,
+      email,
+      idrol,
+      rol,
+      dev_access,
+      beta_access,
+      prod_access,
+    });
+
+    await user.save();
+
+    await validUser.save();
+
+    // Generar el token JWT
+    const { token, expiresIn } = generateToken(validUser.uid);
+    generateRefreshToken(validUser.uid, res);
+
+    return res.status(201).json({
+      message: "Registro exitoso",
+      token,
+      expiresIn,
+      profile: validUser,
+    });
+  } catch (error) {
+    if (error.parent) {
+      if (error.parent.number === 2627)
+        return res.status(400).json({ error: "Ya existe este usuario" });
+    }
+    console.log(error);
+    return res.status(500).json({ error: "Error en servidor" });
+  }
+};
+
+// Función login
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await CatUsers.findOne({ where: { email } });
+    if (!user)
+      return res.status(403).json({ error: "Credenciales incorrectas" });
+
+    const userAccess = await UsersAccess.findOne({ where: { uid: user.id } });
+    if (!userAccess)
+      return res.status(403).json({ error: "Credenciales incorrectas" });
+
+    const resPassword = await userAccess.comparePassword(password);
+    if (!resPassword)
+      return res.status(403).json({ error: "Credenciales incorrectas" });
+
+    // Generar el token JWT
+    const { token, expiresIn } = generateToken(userAccess.uid);
+    generateRefreshToken(userAccess.uid, res);
+
+    return res.json({ token, expiresIn, profile: user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Error en servidor" });
+  }
+};
+
+// Función refreshToken
+export const refreshToken = async (req, res) => {
+  try {
+    const { token, expiresIn } = generateToken(req.uid);
+    const user = await CatUsers.findByPk(req.uid);
+    return res.json({ token, expiresIn, profile: user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Error en servidor" });
+  }
+};
+
+// Función logout
+export const logout = (req, res) => {
+  res.clearCookie("refreshToken");
+  res.json({ ok: true });
+};
