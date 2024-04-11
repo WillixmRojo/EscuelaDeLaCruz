@@ -16,10 +16,6 @@ const routes = [
         component: () => import("pages/LandingPage.vue"),
       },
       {
-        path: "factura",
-        component: () => import("pages/FacturaPage.vue"),
-      },
-      {
         path: "usuarios",
         component: () => import("pages/UsuariosAdmin.vue"),
       },

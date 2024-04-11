@@ -9,7 +9,7 @@ const $q = useQuasar();
 const authStore = useAuthStore();
 const router = useRouter();
 
-const email = ref(null);
+const user = ref(null);
 const password = ref(null);
 
 const handleSubmit = async () => {
@@ -18,9 +18,13 @@ const handleSubmit = async () => {
       spinner: TGCLoading,
       delay: 300,
     });
-    await authStore.login(email.value, password.value);
+
+    await authStore.login(user.value, password.value);
+
     router.push("/admin");
-    email.value = "";
+
+    user.value = "";
+
     password.value = "";
   } catch (error) {
     console.log("error", error);
@@ -53,22 +57,27 @@ const alertBackend = (message = "Error en el servidor") => {
           width: 500px;
           height: 500px;
           text-align: center;
-          border-radius: 15px;
+          border-radius: 5px;
         "
       >
         <div class="form-group" style="padding-top: 30px">
+          <img
+            src="images/ImagenEscuelaCruz.jpg"
+            style="width: 300px; height: 150px"
+          />
           <div
             class="subtitle"
             style="
               display: flex;
               align-items: center;
               justify-content: center;
-              color: #00563b;
+              color: #b16655;
+              font-weight: bold;
+              margin: 2% 0 2% 0;
             "
           >
             Bienvenido
           </div>
-          <div class="title" style="color: #00563b">Portal</div>
           <div
             style="
               display: flex;
@@ -78,23 +87,18 @@ const alertBackend = (message = "Error en el servidor") => {
           >
             <q-input
               color="white"
-              v-model="email"
-              rounded
+              v-model="user"
+              square
               :standout="`${$primary}`"
               outlined
               dense
               bg-color="white"
-              :rules="[
-                (val) =>
-                  (val && /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/.test(val)) ||
-                  'Formato de email incorrecto',
-              ]"
               style="padding-bottom: 20px; font-size: 15px; width: 100%"
             >
               <template v-slot:prepend>
                 <q-icon
-                  name="mdi-email-outline"
-                  style="color: #00563b; font-size: 30px"
+                  name="mdi-account-outline"
+                  style="color: #b16655; font-size: 30px"
                 ></q-icon>
               </template>
               <template v-slot:append>
@@ -105,7 +109,7 @@ const alertBackend = (message = "Error en el servidor") => {
               color="cpl-text"
               type="password"
               v-model="password"
-              rounded
+              square
               :standout="`${$primary}`"
               outlined
               dense
@@ -116,7 +120,7 @@ const alertBackend = (message = "Error en el servidor") => {
               <template v-slot:prepend>
                 <q-icon
                   name="mdi-lock-outline"
-                  style="color: #00563b; font-size: 30px"
+                  style="color: #b16655; font-size: 30px"
                 ></q-icon>
               </template>
               <template v-slot:append>
@@ -134,10 +138,6 @@ const alertBackend = (message = "Error en el servidor") => {
           "
         >
           <q-btn class="btn btn-signin" label="Ingresar" type="submit"></q-btn>
-          <p class="text-cpl-text" style="font-size: 20px; color: #00563b">
-            ¿No tienes una cuenta?
-            <a href="/access/register" style="color: #00a9e0"> Regístrate!</a>
-          </p>
         </div>
       </q-card>
     </q-form>

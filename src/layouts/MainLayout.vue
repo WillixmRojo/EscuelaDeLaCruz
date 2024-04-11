@@ -7,7 +7,7 @@ import { useRouter } from "vue-router";
 const $q = useQuasar();
 const router = useRouter();
 const authStore = useAuthStore();
-const drawer = ref(false);
+const drawer = ref(true);
 const active = ref("Inicio");
 
 function userLogout() {
@@ -41,57 +41,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- view="hHh Lpr lff" -->
   <q-layout
     view="lHh lpR fFf"
     class="shadow-2 rounded-borders"
-    style="display: flex; font-family: Arial, Helvetica, sans-serif"
+    style="
+      display: flex;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: white;
+    "
   >
-    <!-- Encabezado -->
-    <q-header
-      elevated
-      :style="`
-        background-color: #00563b;
-        height: ${$q.screen.height >= 1300 ? '120px;' : '100px;'}
-        display: flex;
-        width: 100%;
-        user-select: none;
-      `"
-    >
-      <!-- :class="$q.dark.isActive ? 'bg-secondary' : 'bg-secondary'" -->
-      <q-toolbar>
-        <q-btn
-          flat
-          round
-          @click="drawer === true ? (drawer = false) : (drawer = true)"
-          icon="menu"
-        ></q-btn>
-        <q-toolbar-title class="q-pa-md">
-          <div style="display: flex; align-items: center">
-            <div
-              :style="`
-                color: #f1f1f1;
-                width: ${$q.screen.width >= 2400 ? '1800px;' : '1075px;'}
-                font-size: ${$q.screen.width >= 2400 ? '75px;' : '44.5px;'}
-                font-weight: 600;
-              `"
-            >
-              Portal
-            </div>
-          </div>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-header>
-    <!-- Panel izquierda de usuario y menu -->
     <q-drawer
       v-model="drawer"
-      :breakpoint="400"
-      style="
-        background-color: #f1f1f1;
-        color: #00563b;
-        border-right: 1px solid #00563b;
-        user-select: none;
-      "
+      :breakpoint="200"
+      :width="250"
+      style="background-color: #b16655; color: #f1f1f1; user-select: none"
     >
       <!-- Menu de opciones -->
       <q-list
@@ -104,46 +67,23 @@ onMounted(() => {
         "
         class="hoverMenu"
       >
-        <q-item
-          clickable
-          v-ripple
-          :draggable="false"
-          :active="active === 'Inicio'"
-          active-class="my-menu-link"
-          to="/"
-          @click="active = 'Inicio'"
-          style="height: 100px"
-        >
-          <q-item-section avatar>
-            <q-icon style="font-size: 30px" name="mdi-account" />
-          </q-item-section>
-
-          <q-item-section class="textoBlanco"> Inicio </q-item-section>
-        </q-item>
-
-        <q-item
-          v-if="
-            authStore.profile?.idrol === 1 || authStore.profile?.idrol === 2
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
           "
-          clickable
-          v-ripple
-          :draggable="false"
-          :active="active === 'Facturacion'"
-          active-class="my-menu-link"
-          to="/factura"
-          @click="active = 'Facturacion'"
-          style="height: 100px"
         >
-          <q-item-section avatar>
-            <q-icon style="font-size: 30px" name="mdi-key" />
-          </q-item-section>
-
-          <q-item-section class="textoBlanco"> Facturación </q-item-section>
-        </q-item>
-
+          <q-avatar icon="mdi-account-circle" size="200px"> </q-avatar>
+          <div style="margin-top: -5%; margin-bottom: 5%">
+            <div>{{ authStore.profile.usuario }}</div>
+            <div>{{ authStore.profile.nivel }}</div>
+          </div>
+        </div>
         <q-item
           v-if="
-            authStore.profile?.idrol === 1 || authStore.profile?.idrol === 2
+            authStore.profile?.idnivel === 1 || authStore.profile?.idnivel === 0
           "
           clickable
           v-ripple
@@ -152,18 +92,16 @@ onMounted(() => {
           active-class="my-menu-link"
           to="/usuarios"
           @click="active = 'Usuarios'"
-          style="height: 100px"
+          style="height: 75px"
         >
           <q-item-section avatar>
             <q-icon style="font-size: 30px" name="mdi-account-key" />
           </q-item-section>
 
-          <q-item-section class="textoBlanco">
-            Administración de Usuarios
-          </q-item-section>
+          <q-item-section class="textoBlanco"> Usuarios </q-item-section>
         </q-item>
 
-        <q-separator style="background-color: #00563b; height: 2px" />
+        <!-- <q-separator style="background-color: #b16655; height: 2px" /> -->
 
         <q-item
           :draggable="false"
@@ -175,7 +113,7 @@ onMounted(() => {
           <q-item-section avatar>
             <q-icon style="font-size: 30px" name="mdi-account-remove" />
           </q-item-section>
-          <q-item-section class="textoBlanco"> Cerrar Sesión </q-item-section>
+          <q-item-section class="textoBlanco"> Salir </q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
@@ -187,15 +125,15 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-// .hoverMenu {
-//   .q-item:hover {
-//     color: #00563b;
-//     background-color: #f1f1f1;
-//   }
-// }
+.hoverMenu {
+  .q-item:hover {
+    color: #b16655;
+    background-color: white;
+  }
+}
 
 .my-menu-link {
-  background-color: #00563b;
+  background-color: #b16655;
   color: #f1f1f1;
 }
 </style>

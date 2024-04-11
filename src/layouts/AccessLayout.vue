@@ -7,6 +7,7 @@
       align-items: center;
       justify-content: center;
       height: 950px;
+      background-color: #b16655;
     "
   >
     <q-page-container class="container" style="max-height: 100%">
@@ -56,7 +57,7 @@ svg {
 }
 
 .login-sec .title {
-  color: #00563b;
+  color: #b16655;
   font-size: 35px;
   font-weight: 500;
   margin-bottom: 15px;
@@ -92,14 +93,14 @@ svg {
 
 .btn.btn.btn-signin {
   width: 75%;
-  background-color: #00563b;
+  background-color: #b16655;
   padding: 0px;
   font-weight: 700;
   font-size: 20px;
   height: 50px;
-  border-radius: 30px;
-  -moz-border-radius: 30px;
-  -webkit-border-radius: 30px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   border: none;
   transition: all 0.218s;
   -o-transition: all 0.218s;
@@ -110,8 +111,8 @@ svg {
 .btn.btn-signin:hover,
 .btn.btn-signin:active,
 .btn.btn-signin:focus {
-  background-color: #f1f1f1;
-  color: #00563b;
+  background-color: #b16655;
+  color: #f1f1f1;
 }
 
 .text-cpl-text {

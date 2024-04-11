@@ -10,10 +10,10 @@ export const useAuthStore = defineStore("auth", () => {
   const expiresIn = ref(null);
   const profile = ref(null);
 
-  const login = async (email, password) => {
+  const login = async (user, password) => {
     try {
       const res = await api.post("/auth/login", {
-        email,
+        user,
         password,
       });
       token.value = res.data.token;
@@ -32,10 +32,9 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  const register = async (rfc, usuario, email, password, repassword) => {
+  const register = async (usuario, email, password, repassword) => {
     try {
       const res = await api.post("/auth/register", {
-        rfc,
         usuario,
         email,
         password,
