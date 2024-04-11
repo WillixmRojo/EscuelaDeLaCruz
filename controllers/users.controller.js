@@ -31,8 +31,6 @@ export const createUser = async (req, res) => {
       prod_access,
     });
 
-    console.log(user)
-
     const newUser = await user.save();
 
     return res.status(201).json({ newUser });

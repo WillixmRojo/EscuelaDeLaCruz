@@ -12,36 +12,20 @@ const catUsersSchema = sequelize.define(
     },
     usuario: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
-    rfc: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    cliente: {
-      type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: true,
       unique: "user_email",
     },
-    idrol: {
+    idnivel: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    rol: {
+    nivel: {
       type: DataTypes.STRING,
-      allowNull: true
-    },
-    dev_access: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-    beta_access: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: false
     },
     prod_access: {
       type: DataTypes.BOOLEAN,

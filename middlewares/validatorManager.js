@@ -24,12 +24,10 @@ export const bodyRegisterValidator = [
       /([^\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1 ]|\_)/
     ),
   body("usuario", "El nombre de usuario debe contener mínimo 6 caracteres"),
-  body("email", "Formato de email incorrecto")
+  body("usuario", "Formato de usuario incorrecto")
     .not()
     .isEmpty()
-    .trim()
-    .isEmail()
-    .normalizeEmail(),
+    .trim(),
   body("password", "Mínimo 6 caracteres").trim().isLength({ min: 6 }),
   body("password", "Formato de password incorrecta").custom(
     (value, { req }) => {
@@ -43,10 +41,8 @@ export const bodyRegisterValidator = [
 ];
 
 export const bodyLoginValidator = [
-  body("email", "Formato de email incorrecto")
-    .trim()
-    .isEmail()
-    .normalizeEmail(),
+  body("user", "Formato de usuario incorrecto")
+    .trim(),
   validationResultExpress,
 ];
 
