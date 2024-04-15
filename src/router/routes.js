@@ -2,10 +2,7 @@ const routes = [
   {
     path: "/access",
     component: () => import("layouts/AccessLayout.vue"),
-    children: [
-      { path: "", component: () => import("pages/LoginPage.vue") },
-      { path: "register", component: () => import("pages/RegisterPage.vue") },
-    ],
+    children: [{ path: "", component: () => import("pages/LoginPage.vue") }],
   },
   {
     path: "/",
