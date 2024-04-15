@@ -1,6 +1,6 @@
 <script setup>
 import { useQuasar } from "quasar";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useAuthStore } from "src/stores/auth-store";
 import { useRouter } from "vue-router";
 
@@ -9,6 +9,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const drawer = ref(true);
 const active = ref("Inicio");
+const activeTitle = ref("Consulta");
 
 function userLogout() {
   $q.dialog({
@@ -31,9 +32,17 @@ function userLogout() {
     });
 }
 
+watch(active, () => {
+  active.value === "Consulta"
+    ? (activeTitle.value = "Consulta")
+    : active.value === "Usuarios"
+    ? (activeTitle.value = "Administración de Usuarios")
+    : (activeTitle.value = "");
+});
+
 onMounted(() => {
   if (router.currentRoute.value.path === "/") {
-    active.value = "Inicio";
+    active.value = "Consulta";
   } else if (router.currentRoute.value.path === "/usuarios") {
     active.value = "Usuarios";
   }
@@ -81,6 +90,27 @@ onMounted(() => {
             <div>{{ authStore.profile.nivel }}</div>
           </div>
         </div>
+
+        <q-item
+          v-if="
+            authStore.profile?.idnivel === 1 || authStore.profile?.idnivel === 0
+          "
+          clickable
+          v-ripple
+          :draggable="false"
+          :active="active === 'Consulta'"
+          active-class="my-menu-link"
+          to="/"
+          @click="active = 'Consulta'"
+          style="height: 75px"
+        >
+          <q-item-section avatar>
+            <q-icon style="font-size: 30px" name="mdi-account-search" />
+          </q-item-section>
+
+          <q-item-section class="textoBlanco"> Consulta </q-item-section>
+        </q-item>
+
         <q-item
           v-if="
             authStore.profile?.idnivel === 1 || authStore.profile?.idnivel === 0
@@ -117,6 +147,38 @@ onMounted(() => {
         </q-item>
       </q-list>
     </q-drawer>
+
+    <q-header
+      style="
+        background-color: white;
+        color: #b16655;
+        display: flex;
+        padding-left: 1%;
+        padding-top: 1%;
+      "
+    >
+      <div style="height: 100%; width: 80%">
+        <q-title-toolbar
+          style="font-size: 50px; font-weight: bold; color: #b16655"
+        >
+          {{ activeTitle }}
+        </q-title-toolbar>
+      </div>
+      <div
+        style="
+          height: 100%;
+          width: 20%;
+          display: flex;
+          align-items: center;
+          justify-content: end;
+          margin-right: 1%;
+        "
+      >
+        <img
+          src="images/ImagenEscuelaCruz.jpg"
+          style="width: 200px; height: 100px"
+        /></div
+    ></q-header>
     <!-- Contenido de paginas -->
     <q-page-container style="width: 100%">
       <router-view />

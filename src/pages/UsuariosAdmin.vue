@@ -52,10 +52,12 @@ const getUserList = async () => {
 
     userList.value = users?.filter((item) => item.usuario !== "");
 
-    if (authStore.profile?.idrol === 1) {
+    if (authStore.profile?.idnivel === 1) {
       userListFiltro.value = userList.value;
-    } else if (authStore.profile?.idrol === 2) {
-      userListFiltro.value = userList.value.filter((item) => item.idrol === 3);
+    } else if (authStore.profile?.idnivel === 2) {
+      userListFiltro.value = userList.value.filter(
+        (item) => item.idnivel === 3
+      );
     }
 
     selectedUser.value = userListFiltro.value[0];

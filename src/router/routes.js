@@ -17,7 +17,7 @@ const routes = [
       },
       {
         path: "usuarios",
-        component: () => import("pages/UsuariosAdmin.vue"),
+        component: () => import("pages/UsersAdmin.vue"),
       },
     ],
     meta: {
