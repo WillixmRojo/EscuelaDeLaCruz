@@ -4,20 +4,20 @@ import { DataTypes } from "sequelize";
 const catInternationalSchema = sequelize.define(
     "EC_CatInternacional",
     {
-        IdInternacional: {
-          type: DataTypes.UUID,
-          primaryKey: true,
-          references: {
-            model: "admin_cat_users",
-            key: "id"
-          }
-        },
+      IdEstructura: {
+        type: DataTypes.STRING,
+        primaryKey: true
       },
-      {
-        freezeTableName: true,
-        createdAt: "FechaCargado",
-        updatedAt: "FechaActualizado"
-      }
+      IdInternacional: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+    },
+    {
+      freezeTableName: true,
+      createdAt: "FechaCargado",
+      updatedAt: "FechaActualizado"
+    }
 );
 
 (async () => {

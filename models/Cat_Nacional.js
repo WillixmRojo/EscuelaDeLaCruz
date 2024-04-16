@@ -4,24 +4,18 @@ import { DataTypes } from "sequelize";
 const catNationalSchema = sequelize.define(
     "EC_CatNacional",
     {
-        IdEstructura: {
-            type: DataTypes.STRING,
-            primaryKey: true
-        },
-        IdInternacional: {
-          type: DataTypes.UUID,
-          references: {
-            model: "EC_CatInternacional",
-            key: "IdInternacional"
-          }
-        },
-        IdNacional: {
-            type: DataTypes.UUID,
-            references: {
-                model: "admin_cat_users",
-                key: "id"
-            }
-        }
+      IdEstructura: {
+        type: DataTypes.STRING,
+        primaryKey: true
+      },
+      IdInternacional: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      IdNacional: {
+        type: DataTypes.STRING,
+        allowNull: true
+      }
       },
       {
         freezeTableName: true,

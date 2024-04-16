@@ -59,11 +59,20 @@ export const login = async (req, res) => {
   try {
     const { user, password } = req.body;
 
-    const userReg = await CatUsers.findOne({ where: { usuario: user } });
+    const userReg = await CatUsers.findOne({
+      where: {
+        usuario: user
+      }
+    });
+
     if (!user)
       return res.status(403).json({ error: "Credenciales incorrectas" });
 
-    const userAccess = await UsersAccess.findOne({ where: { uid: userReg.id } });
+    const userAccess = await UsersAccess.findOne({
+      where: {
+        uid: userReg.id
+      }
+    });
 
     if (!userAccess)
       return res.status(403).json({ error: "Credenciales incorrectas" });

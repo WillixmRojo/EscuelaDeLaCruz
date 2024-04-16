@@ -2,6 +2,8 @@ import { CatUsers } from "../models/Cat_Users.js";
 import { CatInternational } from "../models/Cat_Internacionales.js";
 import { CatNational } from "../models/Cat_Nacional.js";
 import { CatRegional } from "../models/Cat_Regional.js";
+import { CatZonal } from "../models/Cat_Zonal.js";
+import { CatParroquia } from "../models/Cat_Parroquia.js";
 
 export const getUsers = async (req, res) => {
   try {

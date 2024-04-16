@@ -1,8 +1,8 @@
 import { sequelize } from "../database/connectdb.js";
 import { DataTypes } from "sequelize";
 
-const catRegionalSchema = sequelize.define(
-    "EC_CatRegional",
+const catParroquiaSchema = sequelize.define(
+    "EC_CatParroquia",
     {
       IdEstructura: {
           type: DataTypes.STRING,
@@ -19,6 +19,14 @@ const catRegionalSchema = sequelize.define(
       IdRegional: {
         type: DataTypes.STRING,
         allowNull: true
+      },
+      IdZonal: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      IdParroquia: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
     },
     {
@@ -29,8 +37,8 @@ const catRegionalSchema = sequelize.define(
 );
 
 (async () => {
-    await catRegionalSchema.sync({ alter: true });
+    await catParroquiaSchema.sync({ alter: true });
   })();
   
-export const CatRegional = sequelize.model("EC_CatRegional", catRegionalSchema);
+export const CatParroquia = sequelize.model("EC_CatParroquia", catParroquiaSchema);
   
