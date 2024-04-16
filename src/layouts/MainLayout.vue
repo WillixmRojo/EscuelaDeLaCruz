@@ -153,6 +153,7 @@ onMounted(() => {
         background-color: white;
         color: #b16655;
         display: flex;
+        align-items: center;
         padding-left: 1%;
         padding-top: 1%;
       "
