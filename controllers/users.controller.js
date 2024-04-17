@@ -4,12 +4,24 @@ import { CatNational } from "../models/Cat_Nacional.js";
 import { CatRegional } from "../models/Cat_Regional.js";
 import { CatZonal } from "../models/Cat_Zonal.js";
 import { CatParroquia } from "../models/Cat_Parroquia.js";
+import { Op } from "sequelize";
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await CatUsers.findAll();
+    const idnivel = req.params.lvl;
+
+    const users = await CatUsers.findAll({
+      where: {
+        idnivel: {
+          [Op.gt]: idnivel
+        }
+      },
+      attributes: ['id', 'usuario', 'email', 'idnivel']
+    });
+
     return res.json({ users });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: "Error en servidor" });
   }
 };

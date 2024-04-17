@@ -6,43 +6,30 @@ import { generateRefreshToken, generateToken } from "../utils/tokenManager.js";
 // Función register
 export const register = async (req, res) => {
   try {
-    const { usuario, email, password } = req.body;
+    const { usuario, email, password, repassword, nivel } = req.body;
 
-    const validUser = await CatUsers.findOne({ where: { usuario } });
+    const newUser = new CatUsers({
+      usuario,
+      email,
+      idnivel: nivel.value,
+      nivel: nivel.label,
+      prod_access: 1
+    });
 
-    if (!validUser)
-      return res.status(401).json({ error: "Usuario no autorizado, favor de contactar al administrador." });
+    await newUser.save();
 
     const user = new UsersAccess({
       password: password,
-      uid: validUser.id,
-    });
-
-    let idnivel = validUser.idrol;
-    let nivel = validUser.rol;
-    let prod_access = validUser.prod_access;
-
-    validUser.update({
-      usuario,
-      email,
-      idnivel,
-      nivel,
-      prod_access,
+      uid: newUser.dataValues.id,
     });
 
     await user.save();
 
-    await validUser.save();
-
-    // Generar el token JWT
-    const { token, expiresIn } = generateToken(validUser.uid);
-    generateRefreshToken(validUser.uid, res);
-
     return res.status(201).json({
       message: "Registro exitoso",
-      token,
-      expiresIn,
-      profile: validUser,
+      // token,
+      // expiresIn,
+      // profile: validUser,
     });
   } catch (error) {
     if (error.parent) {
