@@ -1,9 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
 
 export const useAuthStore = defineStore("auth", () => {
   const token = ref(null);
@@ -32,23 +29,21 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  const register = async (usuario, email, password, repassword) => {
+  const register = async (newUser) => {
     try {
+      const usuario = newUser.usuario;
+      const email = newUser.correo;
+      const password = newUser.contra;
+      const repassword = newUser.recontra;
+      const nivel = newUser.nivel;
+
       const res = await api.post("/auth/register", {
         usuario,
         email,
         password,
         repassword,
+        nivel,
       });
-
-      token.value = res.data.token;
-      expiresIn.value = res.data.expiresIn;
-      profile.value = res.data.profile;
-      sessionStorage.setItem("isAuth", true);
-
-      refreshTime();
-
-      await logout();
 
       return res.data.message;
     } catch (error) {

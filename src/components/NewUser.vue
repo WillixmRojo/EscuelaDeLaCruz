@@ -10,6 +10,8 @@ import TGCLoading from "src/components/TGCLoading.vue";
 const $q = useQuasar();
 const infraStore = useInfraStore();
 const authStore = useAuthStore();
+const userStore = useUserStore();
+const { showNotify } = useNotify();
 
 const niveles = [
   {
@@ -29,7 +31,40 @@ const niveles = [
     label: "Parroquia",
   },
 ];
-const nivel = ref(null);
+const nuevoUser = ref({
+  usuario: "",
+  correo: "",
+  nivel: "",
+  contra: "",
+  recontra: "",
+});
+
+const newUser = async () => {
+  try {
+    $q.loading.show({
+      spinner: TGCLoading,
+      delay: 300,
+    });
+
+    await authStore.register(nuevoUser.value);
+
+    showNotify("Registro de usuario exitoso!", "positive", "mdi-account-check");
+
+    return;
+  } catch (error) {
+    console.log(error);
+
+    showNotify(
+      "No se creó correctamente el usuario, favor de intentarlo nuevamente.",
+      "negative",
+      "mdi-account-remove"
+    );
+  } finally {
+    $q.loading.hide();
+
+    infraStore.changeBox(1, "close");
+  }
+};
 </script>
 
 <template>
@@ -55,36 +90,48 @@ const nivel = ref(null);
           authStore.profile.idnivel === 1 || authStore.profile.idnivel === 0
         "
         class="new-user-body-international"
-        style="height: 100%; width: 100%; padding: 1%"
+        style="
+          height: 100%;
+          width: 100%;
+          padding: 2.5%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
+        "
       >
         <q-select
           square
           standout
-          label="nivel"
+          label="Nivel"
           :options="niveles"
-          v-model="nivel"
+          v-model="nuevoUser.nivel"
         ></q-select>
-      </div>
-      <div
-        v-if="authStore.profile.idnivel === 2"
-        class="new-user-body-national"
-        style="height: 100%; width: 100%; padding: 1%"
-      >
-        Hola nacional
-      </div>
-      <div
-        v-if="authStore.profile.idnivel === 3"
-        class="new-user-body-regional"
-        style="height: 100%; width: 100%; padding: 1%"
-      >
-        Hola regional
-      </div>
-      <div
-        v-if="authStore.profile.idnivel === 4"
-        class="new-user-body-zone"
-        style="height: 100%; width: 100%; padding: 1%"
-      >
-        Hola zonal
+        <q-input
+          square
+          standout
+          label="Usuario"
+          v-model="nuevoUser.usuario"
+        ></q-input>
+        <q-input
+          square
+          standout
+          label="Correo"
+          v-model="nuevoUser.correo"
+        ></q-input>
+        <q-input
+          square
+          type="password"
+          standout
+          label="Contraseña"
+          v-model="nuevoUser.contra"
+        ></q-input>
+        <q-input
+          square
+          type="password"
+          standout
+          label="Confirmar Contraseña"
+          v-model="nuevoUser.recontra"
+        ></q-input>
       </div>
     </div>
     <div
@@ -98,7 +145,16 @@ const nivel = ref(null);
         border-top: 3px solid #b16655;
       "
     >
-      <q-btn style="width: 33%; color: white; background-color: #b16655">
+      <q-btn
+        :disable="
+          nuevoUser.contra !== nuevoUser.recontra ||
+          nuevoUser.usuario === '' ||
+          nuevoUser.nivel === '' ||
+          nuevoUser.contra.length < 8
+        "
+        @click="async () => await newUser()"
+        style="width: 33%; color: white; background-color: #b16655"
+      >
         Guardar
       </q-btn>
       <q-btn

@@ -12,64 +12,20 @@ export const useUserStore = defineStore("user", () => {
 
   const users = ref([]);
 
-  const createUser = async (nuevoUsuario) => {
+  const getUsers = async (lvl) => {
     try {
-      $q.loading.show({
-        spinner: TGCLoading,
-        delay: 300,
-      });
-
-      const usuario = nuevoUsuario.user;
-      const email = nuevoUsuario.email;
-      const rfc = nuevoUsuario.rfc;
-      const cliente = nuevoUsuario.cliente;
-      const idrol = nuevoUsuario.idrol;
-
-      const res = await api({
-        method: "POST",
-        url: "/users",
-        headers: {
-          Authorization: "Bearer " + authStore.token,
-        },
-        data: {
-          usuario,
-          email,
-          rfc,
-          cliente,
-          idrol,
-        },
-      });
-
-      return res.data.newUser;
-    } catch (error) {
-      throw error.response?.data || error;
-    } finally {
-      $q.loading.hide();
-    }
-  };
-
-  const getUsers = async () => {
-    try {
-      $q.loading.show({
-        spinner: TGCLoading,
-        delay: 300,
-      });
-
       const res = await api({
         method: "GET",
-        url: "/users",
+        url: `/users/${lvl}`,
         headers: {
           Authorization: "Bearer " + authStore.token,
         },
       });
 
-      users.value = [...res.data.users];
-
-      return users.value;
+      return res.data.users;
     } catch (error) {
-      console.log(error.response?.data || error);
-    } finally {
-      $q.loading.hide();
+      console.log(error);
+      throw error.response?.data || error;
     }
   };
 
@@ -130,5 +86,5 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  return { createUser, removeUser, modifiedUser, getUsers };
+  return { removeUser, modifiedUser, getUsers };
 });

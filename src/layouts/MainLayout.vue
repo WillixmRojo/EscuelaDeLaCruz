@@ -159,11 +159,11 @@ onMounted(() => {
       "
     >
       <div style="height: 100%; width: 80%">
-        <q-title-toolbar
+        <q-toolbar-title
           style="font-size: 50px; font-weight: bold; color: #b16655"
         >
           {{ activeTitle }}
-        </q-title-toolbar>
+        </q-toolbar-title>
       </div>
       <div
         style="
