@@ -18,6 +18,28 @@ const jerarquiaUsuario = computed(() => {
 });
 
 const userList = ref([]);
+const niveles = [
+  {
+    value: 1,
+    label: "Internacional",
+  },
+  {
+    value: 2,
+    label: "Nacional",
+  },
+  {
+    value: 3,
+    label: "Regional",
+  },
+  {
+    value: 4,
+    label: "Zonal",
+  },
+  {
+    value: 5,
+    label: "Parroquia",
+  },
+];
 
 const getUsers = async () => {
   try {
@@ -27,6 +49,10 @@ const getUsers = async () => {
     });
 
     userList.value = await userStore.getUsers(jerarquiaUsuario.value);
+
+    userList.value = userList.value.sort(
+      (a, b) => a.idnivel.value - b.idnivel.value
+    );
 
     return;
   } catch (error) {
@@ -56,17 +82,57 @@ onMounted(async () => {
           justify-content: space-evenly;
         "
       >
-        <q-btn
-          @click="infraStore.changeBox(1, 'open')"
+        <div style="width: 50%">
+          <q-btn
+            @click="infraStore.changeBox(1, 'open')"
+            icon="mdi-plus"
+            rounded
+            style="
+              width: 7.5%;
+              height: 7.5%;
+              background-color: #b16655;
+              color: white;
+              font-size: 15px;
+              font-weight: bold;
+              margin-left: 5%;
+            "
+          >
+            <q-tooltip style="font-size: 20px">Crear nuevo usuario</q-tooltip>
+          </q-btn>
+        </div>
+        <div
           style="
-            width: 33%;
-            background-color: #b16655;
-            color: white;
-            font-weight: bold;
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: end;
           "
         >
-          Crear
-        </q-btn>
+          <q-btn
+            style="
+              width: 35%;
+              background-color: #b16655;
+              color: white;
+              font-size: 15px;
+              font-weight: bold;
+            "
+          >
+            Guardar
+          </q-btn>
+          <q-btn
+            @click="async () => await getUsers()"
+            style="
+              width: 35%;
+              background-color: #b16655;
+              color: white;
+              font-size: 15px;
+              font-weight: bold;
+              margin-left: 2.5%;
+            "
+          >
+            Cancelar
+          </q-btn>
+        </div>
       </div>
     </div>
     <div
@@ -78,9 +144,8 @@ onMounted(async () => {
           class="user-cards"
           style="
             width: 20%;
-            height: 30%;
+            height: 35%;
             margin: 1%;
-            padding: 1%;
             background-color: #b16655;
             color: white;
             cursor: pointer;
@@ -89,9 +154,10 @@ onMounted(async () => {
           <div
             class="user-card-header"
             style="
-              height: 20%;
+              height: 30%;
               width: 100%;
               display: flex;
+              flex-direction: column;
               align-items: center;
               justify-content: center;
               background-color: white;
@@ -99,40 +165,74 @@ onMounted(async () => {
               font-size: 25px;
               font-weight: bold;
               text-align: center;
+              border: 1px solid #b16655;
             "
           >
-            {{ user.usuario }}
+            <q-btn rounded style="width: 5%; height: 5%; font-weight: bold">
+              {{
+                !user.idnivel.value
+                  ? user.idnivel === 1
+                    ? "IN"
+                    : user.idnivel === 2
+                    ? "N"
+                    : user.idnivel === 3
+                    ? "R"
+                    : user.idnivel === 4
+                    ? "Z"
+                    : "P"
+                  : user.idnivel.value === 1
+                  ? "IN"
+                  : user.idnivel.value === 2
+                  ? "N"
+                  : user.idnivel.value === 3
+                  ? "R"
+                  : user.idnivel.value === 4
+                  ? "Z"
+                  : "P"
+              }}
+            </q-btn>
+            <div style="width: 90%">
+              <q-input v-model="user.usuario"></q-input>
+            </div>
           </div>
           <div
             class="user-card-details"
             style="
-              height: 20%;
+              height: 70%;
               width: 100%;
               display: flex;
+              flex-direction: column;
               align-items: center;
-              justify-content: center;
-
+              justify-content: start;
               font-size: 25px;
               font-weight: bold;
               text-align: center;
+              margin-top: 2.5%;
             "
           >
-            Jerarquía:
-            {{
-              user.idnivel === 1
-                ? "Internacional"
-                : user.idnivel === 2
-                ? "Nacional"
-                : user.idnivel === 3
-                ? "Diocesano"
-                : user.idnivel === 4
-                ? "Zonal"
-                : "Parroquia"
-            }}
+            <div style="width: 90%; height: 35%">
+              <q-input bg-color="white" v-model="user.email"></q-input>
+            </div>
+            <div style="width: 90%; height: 35%">
+              <q-select
+                bg-color="white"
+                :options="niveles"
+                v-model="user.idnivel"
+              ></q-select>
+            </div>
+            <div style="width: 90%">
+              <q-btn
+                icon="mdi-delete-circle"
+                rounded
+                flat
+                style="background-color: white; color: #b16655"
+              ></q-btn>
+            </div>
           </div>
         </q-card>
       </template>
     </div>
+    {{ userList }}
   </div>
   <q-dialog v-model="infraStore.userDialogBox" :persistent="true">
     <NewUser />

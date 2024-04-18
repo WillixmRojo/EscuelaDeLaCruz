@@ -53,7 +53,9 @@ const newUser = async () => {
     return;
   } catch (error) {
     console.log(error);
-
+    // for (let errorMessage of error.errors) {
+    //   console.log(errorMessage.msg);
+    // }
     showNotify(
       "No se creó correctamente el usuario, favor de intentarlo nuevamente.",
       "negative",
@@ -111,12 +113,25 @@ const newUser = async () => {
           standout
           label="Usuario"
           v-model="nuevoUser.usuario"
+          :rules="[
+            (val) =>
+              (val && /^[A-Za-z]+$/.test(val)) ||
+              'El nombre del usuario no debe contener números.',
+            (val) =>
+              val.length >= 8 ||
+              'El nombre del usuario debe contener al menos 8 caractéres.',
+          ]"
         ></q-input>
         <q-input
           square
           standout
           label="Correo"
           v-model="nuevoUser.correo"
+          :rules="[
+            (val) =>
+              (val && /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/.test(val)) ||
+              'Formato de email incorrecto.',
+          ]"
         ></q-input>
         <q-input
           square
@@ -124,6 +139,11 @@ const newUser = async () => {
           standout
           label="Contraseña"
           v-model="nuevoUser.contra"
+          :rules="[
+            (val) =>
+              val.length >= 8 ||
+              'Contraseña debe contener al menos 8 caractéres.',
+          ]"
         ></q-input>
         <q-input
           square
@@ -131,6 +151,9 @@ const newUser = async () => {
           standout
           label="Confirmar Contraseña"
           v-model="nuevoUser.recontra"
+          :rules="[
+            (val) => val === nuevoUser.contra || 'Contraseña no coincide.',
+          ]"
         ></q-input>
       </div>
     </div>
