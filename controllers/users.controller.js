@@ -16,8 +16,15 @@ export const getUsers = async (req, res) => {
           [Op.gt]: idnivel
         }
       },
-      attributes: ['id', 'usuario', 'email', 'idnivel']
+      attributes: ['id', 'usuario', 'email', 'idnivel', 'nivel']
     });
+
+    for (let user of users) {
+      user.dataValues.idnivel = {
+        value: user.dataValues.idnivel,
+        label: user.dataValues.nivel
+      }
+    }
 
     return res.json({ users });
   } catch (error) {
