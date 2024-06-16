@@ -34,7 +34,7 @@ app.use(express.json({limit: '100mb'}));
 app.use(cookieParser());
 
 // Habilitar la ruta pública
-// app.use(history()); //Se agrega para que funcione el modo "History" del lado del backend (solo para full-stack)
+app.use(history()); //Se agrega para que funcione el modo "History" del lado del backend (solo para full-stack)
 app.use(express.static("public"));
 
 // Configurar el uso de rutas
