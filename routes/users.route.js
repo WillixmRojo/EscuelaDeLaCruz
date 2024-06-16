@@ -20,8 +20,8 @@ const router = Router();
 // PUT      /api/users/:id    update user
 // DELETE   /api/users/:id    remove user
 
-router.get("/", requireToken, getUsers);
-router.get("/:id", requireToken, requireAdmin, paramsValidator, getUser);
+router.get("/:lvl", requireToken, getUsers);
+// router.get("/:id", requireToken, requireAdmin, paramsValidator, getUser);
 router.post("/", requireToken, createUser);
 router.delete("/:id", requireToken, requireAdmin, paramsValidator, removeUser);
 router.put(

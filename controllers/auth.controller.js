@@ -6,48 +6,30 @@ import { generateRefreshToken, generateToken } from "../utils/tokenManager.js";
 // Función register
 export const register = async (req, res) => {
   try {
-    const { rfc, usuario, email, password } = req.body;
+    const { usuario, email, password, repassword, nivel } = req.body;
 
-    const validUser = await CatUsers.findOne({ where: { rfc } });
+    const newUser = new CatUsers({
+      usuario,
+      email,
+      idnivel: nivel.value,
+      nivel: nivel.label,
+      prod_access: 1
+    });
 
-    if (!validUser)
-      return res.status(401).json({ error: "RFC no autorizado, favor de contactar al administrador." });
+    await newUser.save();
 
     const user = new UsersAccess({
       password: password,
-      uid: validUser.id,
-    });
-
-    let idrol = validUser.idrol;
-    let rol = validUser.rol;
-    let dev_access = validUser.dev_access;
-    let beta_access = validUser.beta_access;
-    let prod_access = validUser.prod_access;
-
-    validUser.update({
-      usuario,
-      rfc,
-      email,
-      idrol,
-      rol,
-      dev_access,
-      beta_access,
-      prod_access,
+      uid: newUser.dataValues.id,
     });
 
     await user.save();
 
-    await validUser.save();
-
-    // Generar el token JWT
-    const { token, expiresIn } = generateToken(validUser.uid);
-    generateRefreshToken(validUser.uid, res);
-
     return res.status(201).json({
       message: "Registro exitoso",
-      token,
-      expiresIn,
-      profile: validUser,
+      // token,
+      // expiresIn,
+      // profile: validUser,
     });
   } catch (error) {
     if (error.parent) {
@@ -62,17 +44,28 @@ export const register = async (req, res) => {
 // Función login
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { user, password } = req.body;
 
-    const user = await CatUsers.findOne({ where: { email } });
+    const userReg = await CatUsers.findOne({
+      where: {
+        usuario: user
+      }
+    });
+
     if (!user)
       return res.status(403).json({ error: "Credenciales incorrectas" });
 
-    const userAccess = await UsersAccess.findOne({ where: { uid: user.id } });
+    const userAccess = await UsersAccess.findOne({
+      where: {
+        uid: userReg.id
+      }
+    });
+
     if (!userAccess)
       return res.status(403).json({ error: "Credenciales incorrectas" });
 
     const resPassword = await userAccess.comparePassword(password);
+
     if (!resPassword)
       return res.status(403).json({ error: "Credenciales incorrectas" });
 
@@ -80,7 +73,7 @@ export const login = async (req, res) => {
     const { token, expiresIn } = generateToken(userAccess.uid);
     generateRefreshToken(userAccess.uid, res);
 
-    return res.json({ token, expiresIn, profile: user });
+    return res.json({ token, expiresIn, profile: userReg });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Error en servidor" });
