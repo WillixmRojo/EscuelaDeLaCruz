@@ -1,1 +1,0 @@
-import{K as e,o as t,T as a}from"./index.e58ff246.js";const n={class:"main-landing",style:{width:"100%",height:"100%",padding:"1%"}},r={__name:"LandingPage",setup(s){return e(),(o,c)=>(t(),a("div",n))}};export{r as default};
