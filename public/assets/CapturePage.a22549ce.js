@@ -1,0 +1,1 @@
+import{_ as e,o as a,T as t}from"./index.739f173f.js";const c={},o={class:"main-page",style:{padding:"1%"}};function r(s,n){return a(),t("div",o,"Hola")}var d=e(c,[["render",r]]);export{d as default};
