@@ -37,6 +37,8 @@ watch(active, () => {
     ? (activeTitle.value = "Consulta")
     : active.value === "Usuarios"
     ? (activeTitle.value = "Administración de Usuarios")
+    : active.value === "Captura"
+    ? (activeTitle.value = "Captura de Información Parroquial")
     : (activeTitle.value = "");
 });
 
@@ -45,6 +47,8 @@ onMounted(() => {
     active.value = "Consulta";
   } else if (router.currentRoute.value.path === "/usuarios") {
     active.value = "Usuarios";
+  } else if (router.currentRoute.value.path === "/captura") {
+    active.value = "Captura";
   }
 });
 </script>
@@ -131,7 +135,25 @@ onMounted(() => {
           <q-item-section class="textoBlanco"> Usuarios </q-item-section>
         </q-item>
 
-        <!-- <q-separator style="background-color: #b16655; height: 2px" /> -->
+        <q-item
+          v-if="
+            authStore.profile?.idnivel === 5 || authStore.profile?.idnivel === 0
+          "
+          clickable
+          v-ripple
+          :draggable="false"
+          :active="active === 'Captura'"
+          active-class="my-menu-link"
+          to="/captura"
+          @click="active = 'Captura'"
+          style="height: 75px"
+        >
+          <q-item-section avatar>
+            <q-icon style="font-size: 30px" name="mdi-pencil" />
+          </q-item-section>
+
+          <q-item-section class="textoBlanco"> Captura </q-item-section>
+        </q-item>
 
         <q-item
           :draggable="false"

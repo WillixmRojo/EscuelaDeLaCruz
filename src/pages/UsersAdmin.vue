@@ -50,9 +50,7 @@ const getUsers = async () => {
 
     userList.value = await userStore.getUsers(jerarquiaUsuario.value);
 
-    userList.value = userList.value.sort(
-      (a, b) => a.idnivel.value - b.idnivel.value
-    );
+    userList.value.sort((a, b) => a.idnivel.value - b.idnivel.value);
 
     return;
   } catch (error) {
@@ -154,85 +152,41 @@ onMounted(async () => {
           <div
             class="user-card-header"
             style="
-              height: 30%;
+              height: 25%;
               width: 100%;
+              background-color: white;
+              color: #b16655;
+              font-size: 20px;
+              font-weight: bold;
               display: flex;
               flex-direction: column;
               align-items: center;
               justify-content: center;
-              background-color: white;
-              color: #b16655;
-              font-size: 25px;
-              font-weight: bold;
-              text-align: center;
+              border-radius: 0;
               border: 1px solid #b16655;
             "
           >
-            <q-btn rounded style="width: 5%; height: 5%; font-weight: bold">
-              {{
-                !user.idnivel.value
-                  ? user.idnivel === 1
-                    ? "IN"
-                    : user.idnivel === 2
-                    ? "N"
-                    : user.idnivel === 3
-                    ? "R"
-                    : user.idnivel === 4
-                    ? "Z"
-                    : "P"
-                  : user.idnivel.value === 1
-                  ? "IN"
-                  : user.idnivel.value === 2
-                  ? "N"
-                  : user.idnivel.value === 3
-                  ? "R"
-                  : user.idnivel.value === 4
-                  ? "Z"
-                  : "P"
-              }}
-            </q-btn>
-            <div style="width: 90%">
-              <q-input v-model="user.usuario"></q-input>
-            </div>
+            {{ user.usuario }}
+            <q-badge>{{ user.idnivel.label }}</q-badge>
           </div>
           <div
-            class="user-card-details"
-            style="
-              height: 70%;
-              width: 100%;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: start;
-              font-size: 25px;
-              font-weight: bold;
-              text-align: center;
-              margin-top: 2.5%;
-            "
+            class="user-card-detail"
+            style="height: 75%; width: 100%; padding: 3%"
           >
-            <div style="width: 90%; height: 35%">
-              <q-input bg-color="white" v-model="user.email"></q-input>
-            </div>
-            <div style="width: 90%; height: 35%">
-              <q-select
-                bg-color="white"
-                :options="niveles"
-                v-model="user.idnivel"
-              ></q-select>
-            </div>
-            <div style="width: 90%">
-              <q-btn
-                icon="mdi-delete-circle"
-                rounded
-                flat
-                style="background-color: white; color: #b16655"
-              ></q-btn>
-            </div>
+            <q-select
+              v-if="user.idnivel.value === 2"
+              dense
+              rounded
+              standout
+              bg-color="white"
+              label="Internacional"
+              v-model="user.idnivel"
+              :options="optInternacionales"
+            ></q-select>
           </div>
         </q-card>
       </template>
     </div>
-    {{ userList }}
   </div>
   <q-dialog v-model="infraStore.userDialogBox" :persistent="true">
     <NewUser />

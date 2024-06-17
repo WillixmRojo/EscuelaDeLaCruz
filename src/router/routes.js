@@ -16,6 +16,10 @@ const routes = [
         path: "usuarios",
         component: () => import("pages/UsersAdmin.vue"),
       },
+      {
+        path: "captura",
+        component: () => import("pages/CapturePage.vue"),
+      },
     ],
     meta: {
       auth: true,
