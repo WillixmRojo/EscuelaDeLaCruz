@@ -19,6 +19,30 @@ const catRegionalSchema = sequelize.define(
       IdRegional: {
         type: DataTypes.STRING,
         allowNull: true
+      },
+      Pais: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      Region: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      Estado: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      Ciudad: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      Nombre: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      Obispo: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
     },
     {

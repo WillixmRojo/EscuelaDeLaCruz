@@ -5,10 +5,20 @@ import { CatRegional } from "../models/Cat_Regional.js";
 import { CatZonal } from "../models/Cat_Zonal.js";
 import { CatParroquia } from "../models/Cat_Parroquia.js";
 import { Op } from "sequelize";
+import { sequelize } from "../database/connectdb.js";
 
 export const getUsers = async (req, res) => {
   try {
-    const idnivel = req.params.lvl;
+    const info = req.params.lvl;
+
+    const idnivel = info.split(",")[0];
+    const iduser = info.split(",")[1];
+
+    // const filteredUsers = sequelize.query(
+    //   `
+    //     SELECT
+    //   `
+    // )
 
     const users = await CatUsers.findAll({
       where: {
