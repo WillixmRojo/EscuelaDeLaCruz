@@ -48,7 +48,15 @@ const getUsers = async () => {
       delay: 300,
     });
 
-    userList.value = await userStore.getUsers(jerarquiaUsuario.value);
+    const user = {
+      user: authStore.profile.id,
+      nivel: jerarquiaUsuario.value,
+    };
+
+    userList.value = await userStore.getUsers(
+      jerarquiaUsuario.value,
+      authStore.profile.id
+    );
 
     userList.value.sort((a, b) => a.idnivel.value - b.idnivel.value);
 
@@ -173,16 +181,9 @@ onMounted(async () => {
             class="user-card-detail"
             style="height: 75%; width: 100%; padding: 3%"
           >
-            <q-select
-              v-if="user.idnivel.value === 2"
-              dense
-              rounded
-              standout
-              bg-color="white"
-              label="Internacional"
-              v-model="user.idnivel"
-              :options="optInternacionales"
-            ></q-select>
+            <div v-if="user.idnivel.value === 2">
+              {{ user.email }}
+            </div>
           </div>
         </q-card>
       </template>

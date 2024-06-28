@@ -12,8 +12,9 @@ export const useUserStore = defineStore("user", () => {
 
   const users = ref([]);
 
-  const getUsers = async (lvl) => {
+  const getUsers = async (nivel, user) => {
     try {
+      const lvl = nivel + "," + user;
       const res = await api({
         method: "GET",
         url: `/users/${lvl}`,

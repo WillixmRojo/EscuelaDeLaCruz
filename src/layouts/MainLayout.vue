@@ -90,8 +90,8 @@ onMounted(() => {
         >
           <q-avatar icon="mdi-account-circle" size="200px"> </q-avatar>
           <div style="margin-top: -5%; margin-bottom: 5%">
-            <div>{{ authStore.profile.usuario }}</div>
-            <div>{{ authStore.profile.nivel }}</div>
+            <div>{{ authStore.profile?.usuario }}</div>
+            <div>{{ authStore.profile?.nivel }}</div>
           </div>
         </div>
 
