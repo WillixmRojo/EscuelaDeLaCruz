@@ -1,6 +1,27 @@
 <script setup>
 import { useQuasar } from "quasar";
 import { ref, onMounted, computed } from "vue";
+import { useQuestionStore } from "src/stores/pregunta-store";
+
+const questionStore = useQuestionStore();
+const $q = useQuasar();
+
+const saveDataQuestions = async (data) => {
+  try {
+    $q.loading.show({
+      spinner: TGCLoading,
+      delay: 300,
+    });
+
+    let prueba = await questionStore.saveData(data);
+
+    return prueba;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    $q.loading.hide();
+  }
+};
 
 const hierarchyData = ref({
   inCharge: "",
@@ -882,6 +903,7 @@ const cargosParroquia = [
           "
         >
           <q-btn
+            @click="async () => await saveDataQuestions(dataprueba)"
             style="
               background-color: white;
               color: #b16655;
