@@ -4,6 +4,7 @@ import express from "express";
 import { sequelize } from "./database/connectdb.js";
 import authRouter from "./routes/auth.route.js";
 import usersRouter from "./routes/users.route.js";
+import cuestionarioRouter from "./routes/encuesta.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import history from "connect-history-api-fallback"; //Se agrega para que funcione el modo "History" del lado del backend (solo para full-stack)
@@ -40,6 +41,7 @@ app.use(express.static("public"));
 // Configurar el uso de rutas
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/cuestionario", cuestionarioRouter);
 
 // Conexión a la base de datos de MSSQL Server
 try {
