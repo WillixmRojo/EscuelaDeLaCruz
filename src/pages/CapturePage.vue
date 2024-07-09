@@ -2,6 +2,7 @@
 import { useQuasar } from "quasar";
 import { ref, onMounted, computed } from "vue";
 import { useQuestionStore } from "src/stores/pregunta-store";
+import TGCLoading from "src/components/TGCLoading.vue";
 
 const questionStore = useQuestionStore();
 const $q = useQuasar();
