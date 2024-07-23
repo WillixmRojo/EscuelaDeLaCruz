@@ -94,16 +94,20 @@ const filteredRows = computed(() => {
     );
   }
 
+  // Filtro para Cruzados
   if (filters.value.filter1) {
     filtered = filtered.filter((row) => row.Cruzado === true);
   }
 
+  // Filtro para EscuelaAyudantes
   if (filters.value.filter2) {
     filtered = filtered.filter((row) => row.EscuelaAyudantes === true);
   }
 
   return filtered;
 });
+
+const hasDataToExport = computed(() => filteredRows.value.length > 0);
 
 // Función para manejar el scroll virtual
 const onScroll = ({ to }) => {
@@ -489,196 +493,133 @@ const columns = [
       Text
     </div> -->
       <!-- Menú de Filtrado -->
-      <q-card
-        flat
-        style="width: 15%; margin-right: 1%; margin-left: 1%; float: left"
-      >
-        <div>
-          <q-card-section
+      <div style="display: flex; flex-direction: row; flex-wrap: wrap">
+        <div style="width: 20%; display: flex; justify-content: center">
+          <q-card flat style="width: 80%; margin-right: 1%; margin-left: 1%"
+            ><div class="layout-container"></div>
+            <q-card-section
+              style="
+                background-color: #b16655;
+                color: white;
+                border-top-left-radius: 50px;
+                border-top-right-radius: 50px;
+                cursor: pointer;
+                padding: 1%;
+                font-size: 100%;
+              "
+              @click="toggleFilterContent"
+            >
+              <div class="text-h6">Opciones de Filtrado</div>
+            </q-card-section>
+            <q-slide-transition>
+              <div v-show="isFilterContentVisible">
+                <q-card-section
+                  style="
+                    background-color: #fff5f3;
+                    color: #b16655;
+                    font-size: 100%;
+                    font-weight: bold;
+                  "
+                >
+                  <div>
+                    <q-toggle v-model="filters.filter1" label="Cruzados" />
+                  </div>
+                  <div>
+                    <q-toggle
+                      v-model="filters.filter2"
+                      label="Escuela Ayudantes"
+                    />
+                  </div>
+                </q-card-section>
+                <q-card-section
+                  style="
+                    background-color: #fff5f3;
+                    font-size: 20px;
+                    font-weight: bold;
+                    border-bottom-left-radius: 10px;
+                    border-bottom-right-radius: 10px;
+                  "
+                >
+                  <q-select
+                    style="padding: 0%; margin: 2%; font-weight: bold"
+                    rounded
+                    outlined
+                    v-model="filters.selector1"
+                    :options="options"
+                    label
+                  >
+                    <template v-slot:label>
+                      <div
+                        style="
+                          color: #b16655;
+                          text-align: center;
+                          font-weight: bold;
+                        "
+                      >
+                        Selector 1
+                      </div>
+                    </template>
+                  </q-select>
+                  <q-select
+                    style="padding: 0%; margin: 2%; font-weight: bold"
+                    rounded
+                    outlined
+                    v-model="filters.selector2"
+                    :options="options"
+                    label
+                  >
+                    <template v-slot:label>
+                      <div
+                        style="
+                          color: #b16655;
+                          text-align: center;
+                          font-weight: bold;
+                        "
+                      >
+                        Selector 2
+                      </div>
+                    </template>
+                  </q-select>
+                </q-card-section>
+              </div>
+            </q-slide-transition>
+          </q-card>
+        </div>
+        <div style="width: 80%">
+          <q-btn
+            @click="exportTable"
             style="
+              width: 10%;
               background-color: #b16655;
               color: white;
+              font-size: 15px;
+              font-weight: bold;
               border-radius: 50px;
-              cursor: pointer;
+              margin-left: 1%;
             "
-            @click="toggleFilterContent"
+            :disable="!hasDataToExport"
           >
-            <div class="text-h6">Opciones de Filtrado</div>
-          </q-card-section>
+            <div class="ellipsis">Exportar</div>
+          </q-btn>
+
+          <div class="q-pa-md">
+            <q-table
+              class="my-sticky-dynamic compact-table"
+              flat
+              bordered
+              :rows="filteredRows"
+              :columns="columns"
+              :loading="loading"
+              row-key="Sacerdote"
+              virtual-scroll
+              :virtual-scroll-item-size="28"
+              :virtual-scroll-sticky-size-start="28"
+              :pagination="pagination"
+              :rows-per-page-options="[0]"
+              @virtual-scroll="onScroll"
+            />
+          </div>
         </div>
-        <q-slide-transition>
-          <div v-show="isFilterContentVisible">
-            <q-card-section
-              style="
-                background-color: #fff5f3;
-                color: #b16655;
-                font-size: 100%;
-                font-weight: bold;
-                border-top-left-radius: 5%;
-                border-top-right-radius: 5%;
-              "
-            >
-              <div><q-toggle v-model="filters.filter1" label="Cruzados" /></div>
-              <div>
-                <q-toggle v-model="filters.filter2" label="Escuela Ayudantes" />
-              </div>
-            </q-card-section>
-            <q-card-section
-              style="
-                background-color: #fff5f3;
-                font-size: 20px;
-                font-weight: bold;
-              "
-            >
-              <q-select
-                style="padding: 0%; margin: 2%; font-weight: bold"
-                rounded
-                outlined
-                v-model="filters.selector1"
-                :options="options"
-                label
-              >
-                <template v-slot:label>
-                  <div
-                    style="
-                      color: #b16655;
-                      text-align: center;
-                      font-weight: bold;
-                    "
-                  >
-                    Selector 1
-                  </div>
-                </template>
-              </q-select>
-              <q-select
-                style="padding: 0%; margin: 2%; font-weight: bold"
-                rounded
-                outlined
-                v-model="filters.selector2"
-                :options="options"
-                label
-              >
-                <template v-slot:label>
-                  <div
-                    style="
-                      color: #b16655;
-                      text-align: center;
-                      font-weight: bold;
-                    "
-                  >
-                    Selector 2
-                  </div>
-                </template>
-              </q-select>
-            </q-card-section>
-            <!--
-        <q-card-section style="background-color: #b16655; color: white">
-          <div class="text-h6">Opciones de Vista</div>
-        </q-card-section>
-        <q-separator />
-        <q-card-section
-          style="
-            background-color: #fff5f3;
-            color: #b16655;
-            font-size: 20px;
-            font-weight: bold;
-          "
-        >
-          <div>
-            <q-btn
-              style="
-                width: 100%;
-                margin: 2%;
-                background-color: #b16655;
-                color: white;
-                font-size: 15px;
-                font-weight: bold;
-              "
-              unelevated
-              rounded
-              label="Zona 1"
-            />
-          </div>
-          <div>
-            <q-btn
-              style="
-                width: 100%;
-                margin: 2%;
-                background-color: #b16655;
-                color: white;
-                font-size: 15px;
-                font-weight: bold;
-              "
-              unelevated
-              rounded
-              label="Zona 2"
-            />
-          </div>
-          <div>
-            <q-btn
-              style="
-                width: 100%;
-                margin: 2%;
-                background-color: #b16655;
-                color: white;
-                font-size: 15px;
-                font-weight: bold;
-              "
-              unelevated
-              rounded
-              label="Zona 3"
-            />
-          </div>
-          <div>
-            <q-btn
-              style="
-                width: 100%;
-                margin: 2%;
-                background-color: #b16655;
-                color: white;
-                font-size: 15px;
-                font-weight: bold;
-              "
-              unelevated
-              rounded
-              label="Zona 4"
-            />
-          </div>
-        </q-card-section>-->
-          </div>
-        </q-slide-transition>
-      </q-card>
-
-      <q-btn
-        @click="exportTable"
-        style="
-          width: 10%;
-          background-color: #b16655;
-          color: white;
-          font-size: 15px;
-          font-weight: bold;
-          border-radius: 50px;
-        "
-      >
-        <div class="ellipsis">Exportar</div>
-      </q-btn>
-
-      <div class="q-pa-md">
-        <q-table
-          class="my-sticky-dynamic compact-table"
-          flat
-          bordered
-          :rows="filteredRows"
-          :columns="columns"
-          :loading="loading"
-          row-key="Sacerdote"
-          virtual-scroll
-          :virtual-scroll-item-size="28"
-          :virtual-scroll-sticky-size-start="28"
-          :pagination="pagination"
-          :rows-per-page-options="[0]"
-          @virtual-scroll="onScroll"
-        />
       </div>
     </div>
   </div>
@@ -737,9 +678,9 @@ const columns = [
 
 // Estilos adicionales para mejorar la apariencia del acordeón
 .text-h6
-  display: flex
   justify-content: space-between
   align-items: center
+  text-align: center
 
   .q-icon
     transition: transform 0.3s
