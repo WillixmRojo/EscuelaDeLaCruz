@@ -391,14 +391,98 @@ const columns = [
     // sortable: true,
     format: (val) => (val = true ? "Si" : "No"),
   },
+  //Servicios Escuela
   {
-    name: "ServiciosEscuela",
-    required: false,
-    label: "Servicios Escuela",
+    name: "Director",
+    required: true,
+    label: "Director",
     align: "center",
-    field: "ServiciosEscuela",
+    field: "Director",
     // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
   },
+  {
+    name: "SubDirector",
+    required: true,
+    label: "Sub-Director",
+    align: "center",
+    field: "SubDirector",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "Rector",
+    required: true,
+    label: "Rector",
+    align: "center",
+    field: "Rector",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "AyudanteRector",
+    required: true,
+    label: "Ayudante de Rector",
+    align: "center",
+    field: "AyudanteRector",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "Intendente",
+    required: true,
+    label: "Intendente",
+    align: "center",
+    field: "Intendente",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "IntendenteInterno",
+    required: true,
+    label: "Intendente Interno",
+    align: "center",
+    field: "IntendenteInterno",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "AyudanteConTestimonio",
+    required: true,
+    label: "Ayudante Con Testimonio",
+    align: "center",
+    field: "AyudanteConTestimonio",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "AyudanteSinTestimonio",
+    required: true,
+    label: "Ayudante Sin Testimonio",
+    align: "center",
+    field: "AyudanteSinTestimonio",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "Oyente",
+    required: true,
+    label: "Oyente",
+    align: "center",
+    field: "Oyente",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "Cocina",
+    required: true,
+    label: "Cocina",
+    align: "center",
+    field: "Cocina",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  //Cursos Tomados en la Escuela
   {
     name: "Capacitacion",
     required: true,
@@ -420,19 +504,57 @@ const columns = [
   {
     name: "DirectoresRectores",
     required: true,
-    label: "Directores Rectores",
+    label: "Directores y Rectores",
     align: "center",
     field: "DirectoresRectores",
     // sortable: true,
     format: (val) => (val = true ? "Si" : "No"),
   },
+  //Servicios en Curso
   {
-    name: "ServiciosCurso",
+    name: "SC_CEDR",
     required: true,
-    label: "Servicios Curso",
+    label: "S.C. CEDR",
     align: "center",
-    field: "ServiciosCurso",
+    field: "SC_CEDR",
     // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "SC_Director",
+    required: true,
+    label: "S.C. Director",
+    align: "center",
+    field: "SC_Director",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "SC_Rector",
+    required: true,
+    label: "S.C. Rector",
+    align: "center",
+    field: "SC_Rector",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "SC_Temistas",
+    required: true,
+    label: "S.C. Temistas",
+    align: "center",
+    field: "SC_Temistas",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
+  },
+  {
+    name: "SC_Cocina",
+    required: true,
+    label: "S.C. Cocina",
+    align: "center",
+    field: "SC_Cocina",
+    // sortable: true,
+    format: (val) => (val = true ? "Si" : "No"),
   },
   {
     name: "FechaCargado",
@@ -498,15 +620,19 @@ const columns = [
           <q-card flat style="width: 80%; margin-right: 1%; margin-left: 1%"
             ><div class="layout-container"></div>
             <q-card-section
-              style="
-                background-color: #b16655;
-                color: white;
-                border-top-left-radius: 50px;
-                border-top-right-radius: 50px;
-                cursor: pointer;
-                padding: 1%;
-                font-size: 100%;
-              "
+              :style="{
+                backgroundColor: '#b16655',
+                color: 'white',
+                cursor: 'pointer',
+                padding: '1%',
+                fontSize: '100%',
+                borderTopLeftRadius: '50px',
+                borderTopRightRadius: '50px',
+                borderBottomLeftRadius: isFilterContentVisible ? '0px' : '50px',
+                borderBottomRightRadius: isFilterContentVisible
+                  ? '0px'
+                  : '50px',
+              }"
               @click="toggleFilterContent"
             >
               <div class="text-h6">Opciones de Filtrado</div>
@@ -624,66 +750,77 @@ const columns = [
     </div>
   </div>
 </template>
-<style lang="sass">
-.my-sticky-dynamic
+<style>
+.my-sticky-dynamic {
   /* height or max-height is important */
-  overflow: hidden
-  height: 650px
-
-  .q-table__top,
-  .q-table__bottom,
-  thead tr:first-child th /* bg color is important for th; just specify one */
-    background-color: #b16655
-    color: white
-
-  thead tr th
-    position: sticky
-    z-index: 1
+  overflow: hidden;
+  height: 650px;
   /* this will be the loading indicator */
-  thead tr:last-child th
-    /* height of all previous header rows */
-    top: 28px
-  thead tr:first-child th
-    top: 0
-
   /* prevent scrolling behind sticky top row on focus */
-  tbody
-    /* height of all previous header rows */
-    scroll-margin-top: 28px
+}
+.my-sticky-dynamic .q-table__top,
+.my-sticky-dynamic .q-table__bottom,
+.my-sticky-dynamic thead tr:first-child th {
+  background-color: #b16655;
+  color: white;
+}
+.my-sticky-dynamic thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+.my-sticky-dynamic thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 28px;
+}
+.my-sticky-dynamic thead tr:first-child th {
+  top: 0;
+}
+.my-sticky-dynamic tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 28px;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+.compact-table {
+  font-size: 12px;
+}
+.compact-table .q-table__middle td {
+  padding: 2px 4px;
+}
+.compact-table .q-table__middle tr {
+  height: 28px;
+}
+.compact-table .q-table__grid-content .q-table__grid-item {
+  padding: 2px;
+}
+.compact-table .q-table__bottom {
+  border-top: none;
+}
+.compact-table td,
+.compact-table th {
+  border: none;
+}
+.q-slide-transition {
+  transition: all 0.3s ease-in-out;
+}
+.text-h6 {
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+.text-h6 .q-icon {
+  transition: transform 0.3s;
+}
+.text-h6 .q-icon.rotated {
+  transform: rotate(180deg);
+}
+.rounded-top {
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+}
 
-// Nuevos estilos para quitar el interlineado
-.compact-table
-  .q-table__middle
-    td
-      padding: 2px 4px
-    tr
-      height: 28px
-
-  .q-table__grid-content
-    .q-table__grid-item
-      padding: 2px
-
-  // Ajustar el tamaño de la fuente si es necesario
-  font-size: 12px
-
-  // Eliminar bordes internos si se desea un aspecto aún más compacto
-  .q-table__bottom
-    border-top: none
-  td, th
-    border: none
-
-    // Agregar estilos para la animación del acordeón si es necesario
-.q-slide-transition
-  transition: all 0.3s ease-in-out
-
-// Estilos adicionales para mejorar la apariencia del acordeón
-.text-h6
-  justify-content: space-between
-  align-items: center
-  text-align: center
-
-  .q-icon
-    transition: transform 0.3s
-    &.rotated
-      transform: rotate(180deg)
+.rounded-bottom {
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
 </style>

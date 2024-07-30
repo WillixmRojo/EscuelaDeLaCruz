@@ -14,15 +14,38 @@ const saveDataQuestions = async (data) => {
       delay: 300,
     });
 
-    let prueba = await questionStore.saveData(data);
+    // let prueba = await questionStore.saveData(data);
+    const result = await questionStore.saveData(allFormData.value);
 
-    return prueba;
+    if (result.ok) {
+      $q.notify({
+        color: "positive",
+        message: "Registro guardado exitósamente",
+        icon: "check",
+      });
+    } else {
+      throw new Error(result.error || "Error al guardar el registro");
+    }
+
+    return result;
   } catch (error) {
     console.log(error);
   } finally {
     $q.loading.hide();
   }
 };
+
+const allFormData = computed(() => ({
+  hierarchy: hierarchyData.value,
+  newData: newData,
+  cruzadoOptions: cruzadoOptions,
+  escuelaOptions: escuelaOptions,
+  cargosInternacional: cargosInternacional,
+  cargosNacional: cargosNacional,
+  cargosDiocesano: cargosDiocesano,
+  cargosZona: cargosZona,
+  cargosParroquia: cargosParroquia,
+}));
 
 const hierarchyData = ref({
   inCharge: "",
@@ -52,6 +75,24 @@ const newData = ref({
   pduc: false,
   dvat: false,
   pdda: false,
+  director: false,
+  subDirector: false,
+  rector: false,
+  ayudanteRector: false,
+  intendente: false,
+  intendenteInterno: false,
+  ayudanteConTestimonio: false,
+  ayudanteSinTestimonio: false,
+  oyente: false,
+  cocina: false,
+  capacitacion: false,
+  espiritu: false,
+  directoresRectores: false,
+  sc_CEDR: false,
+  sc_director: false,
+  sc_rector: false,
+  sc_temistas: false,
+  sc_cocina: false,
 });
 
 const cruzadoOptions = [
@@ -746,8 +787,7 @@ const cargosParroquia = [
               display: flex;
               align-items: center;
               padding-top: 2.5%;
-              justify-content: space-evenly;
-              height: 30%;
+              justify-content: center;
             "
           >
             <div style="height: 100%; width: 25%">
@@ -777,41 +817,19 @@ const cargosParroquia = [
                   toggle-color="primary"
                 />
               </div>
-              <div
-                class="fecha"
-                style="
-                  height: 50%;
-                  width: 100%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                "
-              >
-                <div style="width: 15%">Fecha:</div>
-                <div style="width: 65%; padding-left: 5%">
-                  {{ newData.date }}
-                </div>
-                <div style="width: 10%">
-                  <q-btn icon="event" round color="primary"></q-btn>
-                  <q-popup-proxy
-                    cover
-                    transition-show="scale"
-                    transition-hide="scale"
-                  >
-                    <q-date v-model="newData.date" minimal>
-                      <div class="row items-center justify-end q-gutter-sm">
-                        <q-btn
-                          label="Cerrar"
-                          color="primary"
-                          flat
-                          v-close-popup
-                        />
-                      </div>
-                    </q-date>
-                  </q-popup-proxy>
-                </div>
-              </div>
             </div>
+            <div style="height: 100%; width: 69%"></div>
+          </div>
+          <!-- Testimonios -->
+          <div
+            class="data-row-7"
+            style="
+              display: flex;
+              align-items: stretch;
+              padding-top: 2.5%;
+              justify-content: space-evenly;
+            "
+          >
             <div
               class="testimonios"
               style="
@@ -823,17 +841,10 @@ const cargosParroquia = [
                 display: flex;
               "
             >
-              <div
-                style="
-                  height: 100%;
-                  width: 15%;
-                  display: flex;
-                  align-items: center;
-                "
-              >
+              <div style="width: 15%; display: flex; align-items: center">
                 Testimonios:
               </div>
-              <div class="testimonios-options" style="height: 100%; width: 85%">
+              <div class="testimonios-options" style="width: 85%">
                 <div style="display: flex; width: 100%">
                   <div style="width: 50%">
                     <q-checkbox
@@ -879,16 +890,222 @@ const cargosParroquia = [
               </div>
             </div>
           </div>
+          <!-- Servicios en Escuelas -->
           <div
-            class="data-row-7"
+            class="data-row-8"
             style="
               display: flex;
-              align-items: center;
-              padding-top: 2.5%;
+              align-items: stretch;
+              padding-top: 1%;
               justify-content: space-evenly;
-              height: 30%;
             "
-          ></div>
+          >
+            <div
+              class="testimonios"
+              style="
+                height: 100%;
+                width: 65%;
+                border: 2px solid #b16655;
+                padding: 1%;
+                border-radius: 10px;
+                display: flex;
+              "
+            >
+              <div style="width: 15%; display: flex; align-items: center">
+                Servicios en escuelas:
+              </div>
+              <div class="testimonios-options" style="width: 85%">
+                <div style="display: flex; width: 100%">
+                  <div style="width: 33%">
+                    <q-checkbox
+                      v-model="newData.director"
+                      label="Director"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.subDirector"
+                      label="Sub-Director"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.rector"
+                      label="Rector"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.ayudanteRector"
+                      label="Ayudante de rector"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                  </div>
+                  <div style="width: 33%">
+                    <q-checkbox
+                      v-model="newData.intendente"
+                      label="Intendente"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.intendenteInterno"
+                      label="IntendenteInterno"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.ayudanteConTestimonio"
+                      label="Ayudante con testimonio"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                  </div>
+                  <div style="width: 33%">
+                    <q-checkbox
+                      v-model="newData.ayudanteSinTestimonio"
+                      label="Ayudante sin testimonio"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.oyente"
+                      label="Oyente"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.cocina"
+                      label="Cocina"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Cursos Tomados en la escuela -->
+          <div
+            class="data-row-9"
+            style="
+              display: flex;
+              align-items: stretch;
+              padding-top: 1%;
+              justify-content: space-evenly;
+            "
+          >
+            <div
+              class="testimonios"
+              style="
+                width: 65%;
+                border: 2px solid #b16655;
+                padding: 1%;
+                border-radius: 10px;
+                display: flex;
+              "
+            >
+              <div
+                style="
+                  height: 100%;
+                  width: 15%;
+                  display: flex;
+                  align-items: center;
+                "
+              >
+                Cursos tomados en la escuela:
+              </div>
+              <div class="testimonios-options" style="width: 85%">
+                <div style="display: flex; width: 100%">
+                  <div style="width: 100%">
+                    <q-checkbox
+                      v-model="newData.capacitacion"
+                      label="Capacitación"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.espiritu"
+                      label="Espíritu"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.directoresRectores"
+                      label="Directores y rectores"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Servicios en curso -->
+          <div
+            class="data-row-10"
+            style="
+              display: flex;
+              align-items: stretch;
+              padding-top: 1%;
+              justify-content: space-evenly;
+            "
+          >
+            <div
+              class="testimonios"
+              style="
+                height: 100%;
+                width: 65%;
+                border: 2px solid #b16655;
+                padding: 1%;
+                border-radius: 10px;
+                display: flex;
+              "
+            >
+              <div style="width: 15%; display: flex; align-items: center">
+                Servicios en curso:
+              </div>
+              <div class="testimonios-options" style="width: 85%">
+                <div style="display: flex; width: 100%">
+                  <div style="width: 50%">
+                    <q-checkbox
+                      v-model="newData.sc_CEDR"
+                      label="Capacitación, espíritu, directores y rectores"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.sc_director"
+                      label="Director"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.sc_rector"
+                      label="Rector"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                  </div>
+                  <div style="width: 50%">
+                    <q-checkbox
+                      v-model="newData.sc_temistas"
+                      label="Temistas"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                    <q-checkbox
+                      v-model="newData.sc_cocina"
+                      label="Cocina"
+                      checked-icon="task_alt"
+                      unchecked-icon="highlight_off"
+                    ></q-checkbox>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="question-box-footer" style="height: 7.5%; width: 100%">
