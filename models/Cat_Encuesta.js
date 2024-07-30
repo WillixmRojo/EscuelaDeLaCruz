@@ -5,8 +5,9 @@ const catCuestionarioSchema = sequelize.define(
     "EC_CatCuestionario",
     {
       IdRegistro: {
-        type: DataTypes.STRING,
-        primaryKey: true
+        type: DataTypes.INTEGER, 
+        primaryKey: true,
+        autoIncrement: true 
       },
       IdInternacional: {
         type: DataTypes.STRING,
@@ -120,10 +121,48 @@ const catCuestionarioSchema = sequelize.define(
         type: DataTypes.BOOLEAN,
         allowNull: false
       },
-      ServiciosEscuela: {
-        type: DataTypes.STRING,
-        allowNull: true
+      //ServiciosEscuela
+      Director: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
       },
+      SubDirector: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      Rector: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      AyudanteRector: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      Intendente: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      IntendenteInterno: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      AyudanteConTestimonio: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      AyudanteSinTestimonio: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      Oyente: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      Cocina: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      //CursosTomadosEscuela
       Capacitacion: {
         type: DataTypes.BOOLEAN,
         allowNull: false
@@ -136,9 +175,26 @@ const catCuestionarioSchema = sequelize.define(
         type: DataTypes.BOOLEAN,
         allowNull: false
       },
-      ServiciosCurso: {
-        type: DataTypes.STRING,
-        allowNull: true
+      //ServiciosCurso
+      SC_CEDR: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      SC_Director: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      SC_Rector: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      SC_Temistas: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      SC_Cocina: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
       }
     },
     {
