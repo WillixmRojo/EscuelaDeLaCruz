@@ -48,7 +48,18 @@ export default route(function (/* { store, ssrContext } */) {
     }
 
     if (authStore.token) {
-      if (requireAdmin && authStore.profile.idrol !== 1) {
+      const idrol = authStore.profile.idnivel;
+
+      // Nuevas reglas de acceso
+      if (to.path === "/usuarios" && idrol === 5) {
+        return next("/");
+      }
+
+      if (to.path === "/captura" && idrol !== 1 && idrol !== 5 && idrol !== 0) {
+        return next("/");
+      }
+
+      if (requireAdmin && idrol !== 1) {
         return next("/");
       }
       return next();
@@ -57,7 +68,17 @@ export default route(function (/* { store, ssrContext } */) {
     if (requireAuth || sessionStorage.getItem("isAuth")) {
       await authStore.refreshToken();
       if (authStore.token) {
-        if (requireAdmin && authStore.profile.idrol !== 1) {
+        const idrol = authStore.profile.idnivel;
+
+        if (to.path === "/usuarios" && idrol === 5) {
+          return next("/");
+        }
+
+        if (to.path === "/captura" && idrol !== 5 && idrol !== 0) {
+          return next("/");
+        }
+
+        if (requireAdmin && idrol !== 1) {
           return next("/");
         }
         return next();

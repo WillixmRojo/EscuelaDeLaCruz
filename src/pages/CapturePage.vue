@@ -3,9 +3,43 @@ import { useQuasar } from "quasar";
 import { ref, onMounted, computed } from "vue";
 import { useQuestionStore } from "src/stores/pregunta-store";
 import TGCLoading from "src/components/TGCLoading.vue";
+import { useAuthStore } from "src/stores/auth-store";
 
 const questionStore = useQuestionStore();
 const $q = useQuasar();
+const authStore = useAuthStore();
+
+// Función para obtener los datos desde el store
+const getInfoData = async () => {
+  try {
+    const idProfile = authStore.profile.id;
+
+    const result = await questionStore.getInfoParroquia(idProfile);
+
+    const userData = result.data[0];
+
+    // Extraer campos para infoIds
+    infoIds.value = {
+      IdInternacional: userData.IdInternacional || "",
+      IdNacional: userData.IdNacional || "",
+      IdRegion: userData.IdRegion || "",
+      IdZona: userData.IdZona || "",
+      IdParroquia: userData.IdParroquia || "",
+    };
+
+    // Extraer campos para infoUser
+    infoUser.value = {
+      UserRegion: userData.UserRegion || "",
+      UserZona: userData.UserZona || "",
+      UserParroquia: userData.UserParroquia || "",
+    };
+
+    return { infoIds: infoIds.value, infoUser: infoUser.value };
+  } catch (error) {
+    console.error("Error al obtener datos:", error);
+    throw error;
+  }
+};
 
 const saveDataQuestions = async (data) => {
   try {
@@ -14,8 +48,9 @@ const saveDataQuestions = async (data) => {
       delay: 300,
     });
 
+    //console.log("Data:", JSON.stringify(data, null, 2));
     // let prueba = await questionStore.saveData(data);
-    const result = await questionStore.saveData(allFormData.value);
+    const result = await questionStore.saveData(data);
 
     if (result.ok) {
       $q.notify({
@@ -35,28 +70,95 @@ const saveDataQuestions = async (data) => {
   }
 };
 
+const isFormValid = computed(() => {
+  const requiredFields = [
+    hierarchyData.value.CargoInternacional,
+    hierarchyData.value.CargoNacional,
+    hierarchyData.value.CargoParroquia,
+    hierarchyData.value.CargoRegional,
+    hierarchyData.value.CargoZona,
+    newData.value.sacerdote,
+    newData.value.escuadron,
+    newData.value.escuela,
+    newData.value.domicilio,
+    newData.value.colonia,
+    newData.value.ciudad,
+    newData.value.correo,
+    newData.value.telefonoParticular,
+    newData.value.telefonoTrabajo,
+    newData.value.celular,
+    newData.value.cruzado,
+    newData.value.escuelaAyudantes,
+  ];
+
+  const allFieldsFilled = requiredFields.every(
+    (field) => field !== "" && field !== null && field !== undefined
+  );
+  const allOptionsSelected =
+    newData.value.cruzado !== null && newData.value.escuelaAyudantes !== null;
+
+  return allFieldsFilled && allOptionsSelected;
+});
+
+const resetForm = () => {
+  // Reiniciar newData
+  Object.keys(newData.value).forEach((key) => {
+    if (typeof newData.value[key] === "boolean") {
+      newData.value[key] = false;
+    } else if (typeof newData.value[key] === "number") {
+      newData.value[key] = null;
+    } else {
+      newData.value[key] = "";
+    }
+  });
+
+  // Reiniciar hierarchyData
+  Object.keys(hierarchyData.value).forEach((key) => {
+    hierarchyData.value[key] = "";
+  });
+
+  // Reiniciar formTouched si lo estás usando
+  if (typeof formTouched !== "undefined") {
+    formTouched.value = false;
+  }
+};
+
+onMounted(async () => {
+  getInfoData();
+});
+
 const allFormData = computed(() => ({
+  infoIds: infoIds.value,
+  newData: newData.value,
   hierarchy: hierarchyData.value,
-  newData: newData,
   cruzadoOptions: cruzadoOptions,
   escuelaOptions: escuelaOptions,
-  cargosInternacional: cargosInternacional,
-  cargosNacional: cargosNacional,
-  cargosDiocesano: cargosDiocesano,
-  cargosZona: cargosZona,
-  cargosParroquia: cargosParroquia,
 }));
 
+const infoIds = ref({
+  IdInternacional: "",
+  IdNacional: "",
+  IdRegion: "",
+  IdZona: "",
+  IdParroquia: "",
+});
+
+const infoUser = ref({
+  UserRegion: "",
+  UserZona: "",
+  UserParroquia: "",
+});
+
 const hierarchyData = ref({
-  inCharge: "",
-  nCharge: "",
-  dCharge: "",
-  zCharge: "",
-  pCharge: "",
+  CargoInternacional: "",
+  CargoNacional: "",
+  CargoRegional: "",
+  CargoZona: "",
+  CargoParroquia: "",
 });
 
 const newData = ref({
-  nombre: "",
+  sacerdote: "",
   cruzado: "",
   escuadron: "",
   escuela: "",
@@ -66,9 +168,8 @@ const newData = ref({
   correo: "",
   telefonoParticular: "",
   telefonoTrabajo: "",
-  telefonoCelular: "",
-  viveEscuela: "",
-  date: "",
+  celular: "",
+  escuelaAyudantes: "",
   pqelv: false,
   ccc: false,
   lqec: false,
@@ -310,7 +411,7 @@ const cargosParroquia = [
             justify-content: center;
           "
         >
-          Diocesis: {{ "Diocesis 1" }}
+          Diocesis: {{ infoUser.UserRegion }}
         </div>
         <q-separator
           :vertical="true"
@@ -326,7 +427,7 @@ const cargosParroquia = [
             justify-content: center;
           "
         >
-          Zona: {{ "Zona 1" }}
+          Zona: {{ infoUser.UserZona }}
         </div>
         <q-separator
           :vertical="true"
@@ -342,23 +443,7 @@ const cargosParroquia = [
             justify-content: center;
           "
         >
-          Parroquia: {{ "Parroquia 1" }}
-        </div>
-        <q-separator
-          :vertical="true"
-          style="width: 2px; background-color: #b16655; opacity: 0.9"
-        ></q-separator>
-        <div
-          class="nombre"
-          style="
-            width: 25%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          "
-        >
-          Nombre: {{ "Nombre 1" }}
+          Parroquia: {{ infoUser.UserParroquia }}
         </div>
       </div>
       <div
@@ -399,7 +484,7 @@ const cargosParroquia = [
             Cargo Internacional:
             <q-select
               :options="cargosInternacional"
-              v-model="hierarchyData.inCharge"
+              v-model="hierarchyData.CargoInternacional"
               square
               dense
               bg-color="white"
@@ -426,7 +511,7 @@ const cargosParroquia = [
             Cargo Nacional:
             <q-select
               :options="cargosNacional"
-              v-model="hierarchyData.nCharge"
+              v-model="hierarchyData.CargoNacional"
               square
               dense
               bg-color="white"
@@ -453,7 +538,7 @@ const cargosParroquia = [
             Cargo Diocesano:
             <q-select
               :options="cargosDiocesano"
-              v-model="hierarchyData.dCharge"
+              v-model="hierarchyData.CargoRegional"
               square
               dense
               bg-color="white"
@@ -480,7 +565,7 @@ const cargosParroquia = [
             Cargo Zona:
             <q-select
               :options="cargosZona"
-              v-model="hierarchyData.zCharge"
+              v-model="hierarchyData.CargoZona"
               square
               dense
               bg-color="white"
@@ -507,7 +592,7 @@ const cargosParroquia = [
             Cargo Parroquia:
             <q-select
               :options="cargosParroquia"
-              v-model="hierarchyData.pCharge"
+              v-model="hierarchyData.CargoParroquia"
               square
               dense
               bg-color="white"
@@ -544,7 +629,7 @@ const cargosParroquia = [
             >
               <div style="width: 20%">Sacerdote:</div>
               <q-input
-                v-model="newData.nombre"
+                v-model="newData.sacerdote"
                 square
                 bg-color="white"
                 color="#b16655"
@@ -772,7 +857,7 @@ const cargosParroquia = [
             >
               <div style="width: 20%">Celular:</div>
               <q-input
-                v-model="newData.telefonoCelular"
+                v-model="newData.celular"
                 type="number"
                 square
                 bg-color="white"
@@ -812,7 +897,7 @@ const cargosParroquia = [
                   ¿Vive en escuela de ayudantes parroquial?
                 </div>
                 <q-btn-toggle
-                  v-model="newData.viveEscuela"
+                  v-model="newData.escuelaAyudantes"
                   :options="escuelaOptions"
                   toggle-color="primary"
                 />
@@ -1121,7 +1206,8 @@ const cargosParroquia = [
           "
         >
           <q-btn
-            @click="async () => await saveDataQuestions(dataprueba)"
+            @click="saveDataQuestions(allFormData)"
+            :disabled="!isFormValid"
             style="
               background-color: white;
               color: #b16655;
@@ -1135,6 +1221,7 @@ const cargosParroquia = [
             Guardar
           </q-btn>
           <q-btn
+            @click="resetForm"
             style="
               background-color: white;
               color: #b16655;

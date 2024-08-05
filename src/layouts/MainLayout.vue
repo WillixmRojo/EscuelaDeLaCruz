@@ -96,9 +96,6 @@ onMounted(() => {
         </div>
 
         <q-item
-          v-if="
-            authStore.profile?.idnivel === 1 || authStore.profile?.idnivel === 0
-          "
           clickable
           v-ripple
           :draggable="false"
@@ -116,9 +113,7 @@ onMounted(() => {
         </q-item>
 
         <q-item
-          v-if="
-            authStore.profile?.idnivel === 1 || authStore.profile?.idnivel === 0
-          "
+          v-if="authStore.profile?.idnivel !== 5"
           clickable
           v-ripple
           :draggable="false"

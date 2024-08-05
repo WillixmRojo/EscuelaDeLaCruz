@@ -45,8 +45,11 @@ const toggleFilterContent = () => {
 // Función para obtener los datos desde el store
 const getInfoData = async () => {
   try {
+    const idperfil = authStore.profile.id;
+    const idnivel = authStore.profile.idnivel;
+
     loading.value = true;
-    let result = await infoStore.getInfoStore();
+    let result = await infoStore.getInfoStore(idperfil, idnivel);
     return result;
   } catch (error) {
     console.error("Error al obtener datos:", error);
